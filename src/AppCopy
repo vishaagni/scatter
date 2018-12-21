@@ -1,0 +1,123 @@
+import React, { Component } from 'react';
+import * as d3 from "d3";
+
+import Head from './Head';
+import Foot from './Foot';
+import Nav from './Nav';
+import './App.css';
+//import d3-scale as d3-scale from "d3";
+//import * as d3scale from "d3-scale";
+//import { scale } from 'd3-scale';
+export default class ScatterPlot extends Component {
+/*    
+state = { data:[] };
+
+componentDidMount() {
+  fetch('http://localhost:5000/')
+  .then(response => {
+    console.log(response);
+    return response.json();
+  })
+  .then(data => {
+          console.log(data);
+
+      
+          this.setState({ data });
+
+        })
+}
+*/
+    render() {
+        var dataset = [
+            [ 5,     20 ],
+            [ 480,   90 ],
+            [ 250,   50 ],
+            [ 100,   33 ],
+            [ 330,   95 ],
+            [ 410,   12 ],
+            [ 475,   44 ],
+            [ 25,    67 ],
+            [ 85,    21 ],
+            [ 220,   88 ]
+        ];
+        var padding = 20;
+var xScale=d3.scaleLinear().domain([0,d3.max(dataset,function(d) {return d[0];})])
+                .range([padding,700-padding]).clamp(true);
+                console.log("max x"+d3.max(dataset,function(d) {return d[0];}));
+var yScale=d3.scaleLinear().domain([0,d3.max(dataset,function(d){return d[1];})])
+                    .range([500-padding,padding]).clamp(true);
+var rScale = d3.scaleLinear()
+                    .domain([0, d3.max(dataset, function(d) { return d[1]; })])
+                    .range([2, 5]);
+var xAxis=d3.axisBottom()
+.scale(xScale).ticks(20);
+var yAxis=d3.axisLeft().scale(yScale).ticks(20);
+        var svg = d3.select("div")
+        .append("svg")
+        .attr("width", 1000)
+        .attr("height", 600);
+        svg.selectAll("circle")
+        .data(dataset)
+        .enter()
+        .append("circle")
+        .attr("cx", function(d) {
+            return xScale(d[0]);
+       })
+       .attr("cy", function(d) {
+            return yScale(d[1]);
+       })
+       .attr("r", function(d){
+           return rScale(d[1]);
+       })
+       .style("color","red");
+       
+       svg.selectAll("text")
+       .data(dataset)
+       .enter()
+       .append("text")
+.text(function(d) {
+        return d[0] + "," + d[1];
+   })
+   .attr("x", function(d) {
+    return xScale(d[0]);
+})
+.attr("y", function(d) {
+    return yScale(d[1]);
+})
+.attr("font-family", "sans-serif")
+.attr("font-size", "11px")
+.attr("fill", "red");
+svg.append("g")
+.attr("className", "axis") 
+.attr("transform", "translate(0,"+(500-padding)+" )")
+.call(xAxis);
+
+svg.append("g")
+.attr("class","yaxis")
+.attr("transform","translate("+padding+",0)")
+.call(yAxis);
+
+
+
+        return (
+          <div>
+             <div> <Head /> </div>
+             <div class="split left"> 
+             <div class="centered"> 
+             <Nav />
+             </div> </div>
+             <div class="split right"> 
+             <div class="centered"> 
+               <div class ="bid"> </div>
+             </div> </div>
+             <div> <Foot /> </div>
+          </div>
+        )
+    }
+}
+
+
+
+
+
+
